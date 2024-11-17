@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        /* CSS Styles */
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .game-container {
+            text-align: center;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .square {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            background-color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .square.X {
+            color: #f44336;
+        }
+
+        .square.O {
+            color: #4caf50;
+        }
+
+        .restart-button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .restart-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Tic-Tac-Toe</h1>
+        <div class="board">
+            <!-- Squares in the game grid -->
+            <div class="square" id="0"></div>
+            <div class="square" id="1"></div>
+            <div class="square" id="2"></div>
+            <div class="square" id="3"></div>
+            <div class="square" id="4"></div>
+            <div class="square" id="5"></div>
+            <div class="square" id="6"></div>
+            <div class="square" id="7"></div>
+            <div class="square" id="8"></div>
+        </div>
+        <button class="restart-button">Restart</button>
+    </div>
+
+    <script>
+        // JavaScript code
+
+        let currentPlayer = 'X'; // Start with Player X
+        let boardState = ['', '', '', '', '', '', '', '', '']; // 3x3 grid state (empty initially)
+
+        const squares = document.querySelectorAll('.square');
+        const restartButton = document.querySelector('.restart-button');
+
+        // Function to handle square clicks
+        squares.forEach((square, index) => {
+            square.addEventListener('click', () => {
+                if (boardState[index] === '' && !checkWinner()) {
+                    boardState[index] = currentPlayer;
+                    square.textContent = currentPlayer;
+                    square.classList.add(currentPlayer);
+                    if (checkWinner()) {
+                        alert(`${currentPlayer} wins!`);
+                    } else {
+                        currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Switch player
+                    }
+                }
+            });
+        });
+
+        // Function to check for a winner
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // horizontal
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // vertical
+                [0, 4, 8], [2, 4, 6] // diagonal
+            ];
+
+            for (let pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Function to restart the game
+        restartButton.addEventListener('click', () => {
+            boardState = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            squares.forEach(square => {
+                square.textContent = '';
+                square.classList.remove('X', 'O');
+            });
+        });
+    </script>
+</body>
+</html>
